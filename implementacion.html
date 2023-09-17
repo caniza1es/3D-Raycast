@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raycasting</title>
+    <link rel="icon" href="assets/ray.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>3D Raycasting</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="tutorial.html">Tutorial</a></li>
+            <li><a href="implementacion.html">Implementación</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <aside id="tabla-contenido">
+            <h2>Tabla de Contenido</h2>
+            <ul id="toc-list"></ul>
+        </aside>
+        
+        <main>
+            <section id="Cruda">
+                <h2>Implementación cruda</h2>
+                <canvas id="mapCanvas" width="400" height="400"></canvas>
+                <input type="range" id="angleSlider" min="0" max="360" step="1" value="90">
+                <p>La forma más rápida de implementar la detección de colisiones es simplemente sumar en dx y dy dado un ángulo hasta encontrar la pared sin embargo esta técnica puede resultar ineficiente en términos de rendimiento por varias razones:</p>
+                <ul>
+                    <li>Ineficiente para grandes áreas.</li>
+                    <li>Precisión limitada.</li>
+                    <li>Recálculo innecesario.</li>
+                    <li>Limitación en la detección de múltiples colisiones.</li>
+                </ul>
+            </section>
+        </main>
+    </div>
+    <footer>
+        <p>&copy; 2023 caniza1es</p>
+    </footer>
+    <script src="js/implementacion.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/toc.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raycasting</title>
+    <link rel="icon" href="assets/ray.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>3D Raycasting</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="tutorial.html">Tutorial</a></li>
+            <li><a href="implementacion.html">Implementación</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <aside id="tabla-contenido">
+            <h2>Tabla de Contenido</h2>
+            <ul id="toc-list"></ul>
+        </aside>
+        
+        <main>
+            <section id="Matriz 2D">
+                <h2>Matriz mundo</h2>
+                <p>Debemos empezar definiendo una matriz 2d, cada celula de esta matriz representa ya sea una pared o un pasillo, lo importante es que todas las celulas de esta comparten el mismo ancho y la misma altura</p>
+                <img src="assets/mundo.png" alt="Mundo">
+            </section>
+            <section id="graficos">
+                <h2>Graficos en computadora</h2>
+                <canvas id="canvas" width="400" height="400"></canvas>
+                <input type="range" id="angle-slider" min="0" max="360" step="1" value="45">
+                <span id="angle-display">Ángulo: 45°</span>
+                <span id="tan-display">Tangente: 1.00</span>
+                <p>Es crucial entender la diferencia fundamental entre la representación de ángulos en gráficos de computadora y en libros. En los libros, los ángulos incrementan en sentido contrario a las manecillas del reloj, mientras que en los gráficos de computadora, los ángulos incrementan en sentido de las manecillas del reloj además de que la componente Y crece hacia abajo. La razón a estas diferencias radica en las convenciones adoptadas para asegurar una representación coherente y eficiente de las imágenes en pantalla.</p>
+            </section>
+            <section id="algoritmo-DDA">
+                <h2>Algoritmo DDA</h2>
+                <p>Primero debemos encontrar las primeras distancias delta-x y delta-y, todo lo que necesitamos hacer es incrementar estos deltas hasta encontrar una intersección con la pared. Esta técnica de encontrar la diferencia e incrementar el mismo valor cada vez se llama a veces "algoritmo DDA".</p>
+                <p>DDA significa "Analizador Diferencial Digital". Es un nombre poco atractivo para algo que en realidad no es tan difícil. Este conjunto de algoritmos se ocupa de cómo interpolamos valores desde un valor de inicio hasta un valor final.</p>
+                <p>En nuestro caso, nuestro algoritmo DDA simplemente define cuánto debe incrementarse en cada paso y procede a incrementar los mismos valores delta-x y delta-y en cada iteración de nuestro bucle. Continuamos incrementando hasta encontrar la intersección con la pared que estamos buscando.</p>
+                <p>Sin embargo hay 2 casos a revisar: intersecciones horizontales/intersecciones verticales, luego esto se va a reducir a cual caso nos da la menor distancia</p>
+                <img src="assets/DDA.jpg" alt="Algoritmo DDA">
+            </section>
+            <section id="intersecciones-horizontales">
+                <h2>Intersecciones Horizontales</h2>
+                <img src="assets/horizontales.png" alt="Intersecciones Horizontales">
+            </section>
+            <section id="intersecciones-verticales">
+                <h2>Intersecciones verticales</h2>
+                <img src="assets/verticales.gif" alt="Intersecciones verticales">
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 caniza1es</p>
+    </footer>
+    <script src="js/main.js"></script>
+    <script src="js/tutorial.js"></script>
+    <script src="js/toc.js"></script>
+</body>
+</html>

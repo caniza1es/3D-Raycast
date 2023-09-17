@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raycasting en 3D</title>
+    <link rel="icon" href="assets/ray.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Raycasting en 3D</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="tutorial.html">Tutorial</a></li>
+            <li><a href="implementacion.html">Implementación</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <aside id="tabla-contenido">
+            <h2>Tabla de Contenido</h2>
+            <ul id="toc-list"></ul>
+        </aside>
+        
+        <main>
+            <section id="introduccion">
+                <h2>Introducción al Raycasting en 3D</h2>
+                <p>El raycasting en 3D es una técnica que permite efectos de renderizado tridimensional de manera restrictiva pero altamente eficiente. Este algoritmo es especialmente conocido por su papel en el juego Wolfenstein 3D. Juego que marca una nueva epoca para los juegos de primera persona</p>
+                <p>El principio del raycasting se basa en "disparos" de rayos virtuales desde el punto de vista del jugador para determinar qué partes del mundo 3D son visibles desde esa perspectiva. Estos rayos retornan la proyección 3d en base a la distancia de colision</p>
+                <p>Esta técnica es eficiente debido a que solo operaciones matematicas básicas son necesarias para que el algoritmo determine la distancia entre los objetos y la cámara del jugador</p>
+            </section>
+            
+            <section id="historia">
+                <h2>Historia del Raycasting</h2>
+                <p>La historia del raycasting se remonta a la década de 1980 una epoca en el que el poder computacional no era el suficiente para lograr graficos 3D como hoy en dia los conocemos. Aunque se utilizaron enfoques similares en juegos anteriores, el raycasting ganó relevancia con el lanzamiento de Wolfenstein 3D, pues a diferencias de estrategias anteriormente planteadas John Carmack logra una ilusión de entorno 3D gracias a restricciones en el mundo a simular.</p>
+                <p>Wolfenstein 3D presentaba pasillos y habitaciones que parecían tridimensionales, sin embargo el juego solo esta compuesto de 2 coordenadas. El raycasting permitía que los objetos y los enemigos fueran dibujados en función de su distancia al jugador y no respecto a un componente dimensional</p>
+                <p>Desde entonces, el raycasting ha influido en el diseño de juegos y se ha usado como base para tecnologías de renderizado más avanzadas, como lo es el ray tracing.</p>
+            </section>
+
+            <section id="importancia">
+                <h2>Importancia del Raycasting </h2>
+                <p>El raycasting ha sido de gran utilidad en la simulación. Su capacidad para generar gráficos 3D en tiempo real aunque restrictiva, ha permitido experiencias más inmersivas donde el poder de computación no es potente.</p>
+                <p>En la actualidad, el raycasting sigue siendo relevante en la industria de los videojuegos. Se utiliza en la mayoría de los entornos primera persona no con el fin de renderizado sino detección de colisiones.</p>
+            </section>
+
+            <section id="tecnica">
+                <h2>Técnica del Raycasting</h2>
+                <p>La técnica del raycasting implica el uso de rayos virtuales que se emiten desde la cámara del jugador hacia colision con paredes en la matriz 2D. Cada rayo interseca objetos en su camino, y esta información se utiliza para determinar cómo se representa la escena en la pantalla.</p>
+                <p>Se realizan cálculos matemáticos para determinar la distancia de los objetos al jugador, su altura en la pantalla y cómo se deben dibujar en función de su posición relativa gracias a la restricción de que el mundo subyacente sea plano.</p>
+                <p>El raycasting es especialmente eficiente en términos de recursos, lo que lo convierte en una opción popular para juegos de FPS en computadora con hardware limitado.</p>
+            </section>
+            <section id="aplicaciones">
+                <h2>Aplicaciones del Raycasting en la Industria de los Videojuegos</h2>
+                <p>El raycasting se utiliza en una variedad de aplicaciones en los videojuegos, lo que demuestra su versatilidad y utilidad en diferentes géneros y contextos:</p>
+                <ul>
+                    <li><strong>Renderizado en tiempo real:</strong>El raycasting es usado representar escenas 3D en tiempo real en juegos de disparos en primera persona (FPS), RPG y otros géneros.</li>
+                    <li><strong>Detección de colisiones:</strong>También se utiliza para detectar colisiones entre objetos y personajes en el mundo del juego, con el fin de facil implementación de interacciones en simulaciones</li>
+                    <li><strong>Simulación de sombras y efectos de iluminación:</strong> La proyección que ofrece el raycasting facilita el calculo sombras y efectos de iluminación en tiempo real</li>
+                    <li><strong>Generación de mapas y niveles procedurales:</strong> El raycasting se utiliza para crear mapas y niveles de juego de manera dinámica y variada. Siendo una gran herramienta para entornos procedimentales</li>
+                    <li><strong>Sistemas de visión y line of sight:</strong> El raycasting también es usado en sistemas de visión y line of sight para enemigos y personajes.</li>
+                </ul>
+            </section>
+        </main>
+    </div>
+    <footer>
+        <p>&copy; 2023 caniza1es</p>
+    </footer>
+    <script src="js/main.js"></script>
+    <script src="js/toc.js"></script>
+</body>
+</html>
