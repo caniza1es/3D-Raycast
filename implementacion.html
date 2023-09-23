@@ -18,31 +18,24 @@
             <li><a href="implementacion.html">Implementación</a></li>
         </ul>
     </nav>
-    <div class="container">
+    <div id = "2DDA"class="container">
         <aside id="tabla-contenido">
             <h2>Tabla de Contenido</h2>
             <ul id="toc-list"></ul>
         </aside>
         
         <main>
-            <section id="Cruda">
-                <h2>Implementación cruda</h2>
-                <canvas id="mapCanvas" width="400" height="400"></canvas>
-                <input type="range" id="angleSlider" min="0" max="360" step="1" value="90">
-                <p>La forma más rápida de implementar la detección de colisiones es simplemente sumar en dx y dy dado un ángulo hasta encontrar la pared sin embargo esta técnica puede resultar ineficiente en términos de rendimiento por varias razones:</p>
-                <ul>
-                    <li>Ineficiente para grandes áreas.</li>
-                    <li>Precisión limitada.</li>
-                    <li>Recálculo innecesario.</li>
-                    <li>Limitación en la detección de múltiples colisiones.</li>
-                </ul>
+            <section id="Algoritmo DDA en 2D">
+                <h2>Algoritmo DDA en 2D</h2>
+                <script src="js/p5.js"></script>
+                <script src="js/raycast.js"></script>
             </section>
         </main>
     </div>
+
     <footer>
         <p>&copy; 2023 caniza1es</p>
     </footer>
-    <script src="js/implementacion.js"></script>
     <script src="js/main.js"></script>
     <script src="js/toc.js"></script>
 </body>
