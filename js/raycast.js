@@ -4,8 +4,9 @@ const MAP_NUM_COLS = 15;
 const WINDOW_WIDTH = MAP_NUM_COLS * TILE_SIZE;
 const WINDOW_HEIGHT = MAP_NUM_ROWS * TILE_SIZE;
 const FOV_ANGLE = 60 * (Math.PI / 180);
-const WALL_STRIP_WIDTH = 1; 
+const WALL_STRIP_WIDTH = 1;
 const NUM_RAYS = WINDOW_WIDTH / WALL_STRIP_WIDTH;
+const MINIMAP_SCALE_FACTOR = 0.2;
 
 class Map {
     constructor() {
@@ -13,7 +14,7 @@ class Map {
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
             [1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-            [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1],
+            [1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -22,7 +23,21 @@ class Map {
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         ];
+        this.wallColor = localStorage.getItem('wallColor') || '#ffffff';
+        this.skyColor = localStorage.getItem('skyColor') || '#0077FF';
+        this.floorColor = localStorage.getItem('floorColor') || '#773300';
     }
+
+    setSkyColor(color) {
+        this.skyColor = color;
+        localStorage.setItem('skyColor', color);
+    }
+
+    setFloorColor(color) {
+        this.floorColor = color;
+        localStorage.setItem('floorColor', color);
+    }
+
     hasWallAt(x, y) {
         if (x < 0 || x > WINDOW_WIDTH || y < 0 || y > WINDOW_HEIGHT) {
             return true;
@@ -36,10 +51,15 @@ class Map {
             for (let j = 0; j < MAP_NUM_COLS; j++) {
                 let tileX = j * TILE_SIZE;
                 let tileY = i * TILE_SIZE;
-                let tileColor = this.grid[i][j] == 1 ? "#222" : "#fff";
+                let tileColor = this.grid[i][j] == 1 ? this.wallColor : "#fff";
                 stroke("#222");
                 fill(tileColor);
-                rect(tileX, tileY, TILE_SIZE, TILE_SIZE);
+                rect(
+                    MINIMAP_SCALE_FACTOR * tileX,
+                    MINIMAP_SCALE_FACTOR * tileY,
+                    MINIMAP_SCALE_FACTOR * TILE_SIZE,
+                    MINIMAP_SCALE_FACTOR * TILE_SIZE
+                );
             }
         }
     }
@@ -48,22 +68,19 @@ class Map {
 class Player {
     constructor() {
         this.x = WINDOW_WIDTH / 2;
-        this.y = WINDOW_HEIGHT / 2;
-        this.radius = 3;
+        this.y = WINDOW_HEIGHT / 7;
+        this.radius = 4;
         this.turnDirection = 0; 
         this.walkDirection = 0; 
         this.rotationAngle = Math.PI / 2;
-        this.moveSpeed = 2.0;
-        this.rotationSpeed = 2 * (Math.PI / 180);
+        this.moveSpeed = 4.0;
+        this.rotationSpeed = 3 * (Math.PI / 180);
     }
     update() {
         this.rotationAngle += this.turnDirection * this.rotationSpeed;
-
         let moveStep = this.walkDirection * this.moveSpeed;
-
         let newPlayerX = this.x + Math.cos(this.rotationAngle) * moveStep;
         let newPlayerY = this.y + Math.sin(this.rotationAngle) * moveStep;
-
         if (!grid.hasWallAt(newPlayerX, newPlayerY)) {
             this.x = newPlayerX;
             this.y = newPlayerY;
@@ -71,8 +88,19 @@ class Player {
     }
     render() {
         noStroke();
-        fill("red");
-        circle(this.x, this.y, this.radius);
+        fill("blue");
+        circle(
+            MINIMAP_SCALE_FACTOR * this.x,
+            MINIMAP_SCALE_FACTOR * this.y,
+            MINIMAP_SCALE_FACTOR * this.radius
+        );
+        stroke("blue");
+        line(
+            MINIMAP_SCALE_FACTOR * this.x,
+            MINIMAP_SCALE_FACTOR * this.y,
+            MINIMAP_SCALE_FACTOR * (this.x + Math.cos(this.rotationAngle) * 30),
+            MINIMAP_SCALE_FACTOR * (this.y + Math.sin(this.rotationAngle) * 30)
+        );
     }
 }
 
@@ -83,10 +111,8 @@ class Ray {
         this.wallHitY = 0;
         this.distance = 0;
         this.wasHitVertical = false;
-
         this.isRayFacingDown = this.rayAngle > 0 && this.rayAngle < Math.PI;
         this.isRayFacingUp = !this.isRayFacingDown;
-
         this.isRayFacingRight = this.rayAngle < 0.5 * Math.PI || this.rayAngle > 1.5 * Math.PI;
         this.isRayFacingLeft = !this.isRayFacingRight;
     }
@@ -141,20 +167,24 @@ class Ray {
                 nextVertTouchY += ystep;
             }
         }
-        let horzHitDistance = (foundHorzWallHit)? distanceBetweenPoints(player.x, player.y, horzWallHitX, horzWallHitY) : Number.MAX_VALUE;
-        let vertHitDistance = (foundVertWallHit)? distanceBetweenPoints(player.x, player.y, vertWallHitX, vertWallHitY) : Number.MAX_VALUE;
+        let horzHitDistance = (foundHorzWallHit)
+            ? distanceBetweenPoints(player.x, player.y, horzWallHitX, horzWallHitY)
+            : Number.MAX_VALUE;
+        let vertHitDistance = (foundVertWallHit)
+            ? distanceBetweenPoints(player.x, player.y, vertWallHitX, vertWallHitY)
+            : Number.MAX_VALUE;
         this.wallHitX = (horzHitDistance < vertHitDistance) ? horzWallHitX : vertWallHitX;
         this.wallHitY = (horzHitDistance < vertHitDistance) ? horzWallHitY : vertWallHitY;
         this.distance = (horzHitDistance < vertHitDistance) ? horzHitDistance : vertHitDistance;
         this.wasHitVertical = (vertHitDistance < horzHitDistance);
     }
     render() {
-        stroke("rgba(255, 0, 0, 0.3)");
+        stroke("rgba(255, 0, 0, 1.0)");
         line(
-            player.x,
-            player.y,
-            this.wallHitX,
-            this.wallHitY
+            MINIMAP_SCALE_FACTOR * player.x,
+            MINIMAP_SCALE_FACTOR * player.y,
+            MINIMAP_SCALE_FACTOR * this.wallHitX,
+            MINIMAP_SCALE_FACTOR * this.wallHitY
         );
     }
 }
@@ -162,7 +192,6 @@ class Ray {
 let grid = new Map();
 let player = new Player();
 let rays = [];
-
 function normalizeAngle(angle) {
     angle = angle % (2 * Math.PI);
     if (angle < 0) {
@@ -170,7 +199,6 @@ function normalizeAngle(angle) {
     }
     return angle;
 }
-
 function keyPressed() {
     if (keyCode == UP_ARROW) {
         player.walkDirection = +1;
@@ -182,7 +210,6 @@ function keyPressed() {
         player.turnDirection = -1;
     }
 }
-
 function keyReleased() {
     if (keyCode == UP_ARROW) {
         player.walkDirection = 0;
@@ -194,7 +221,6 @@ function keyReleased() {
         player.turnDirection = 0;
     }
 }
-
 function castAllRays() {
     let columnId = 0;
     let rayAngle = player.rotationAngle - (FOV_ANGLE / 2);
@@ -207,6 +233,33 @@ function castAllRays() {
         columnId++;
     }
 }
+
+
+
+function render3DProjectedWalls() {
+
+    fill(grid.skyColor);
+    noStroke();
+    rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT / 2);
+    fill(grid.floorColor);
+    rect(0, WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT / 2);
+    for (let i = 0; i < NUM_RAYS; i++) {
+        let ray = rays[i];
+        let correctWallDistance = ray.distance * Math.cos(ray.rayAngle - player.rotationAngle);
+        let distanceProjectionPlane = (WINDOW_WIDTH / 2) / Math.tan(FOV_ANGLE / 2);
+        let wallStripHeight = (TILE_SIZE / correctWallDistance) * distanceProjectionPlane;
+        fill(grid.wallColor);
+        noStroke();
+        rect(
+            i * WALL_STRIP_WIDTH,
+            (WINDOW_HEIGHT / 2) - (wallStripHeight / 2),
+            WALL_STRIP_WIDTH,
+            wallStripHeight
+        );
+    }
+}
+
+
 
 function normalizeAngle(angle) {
     angle = angle % (2 * Math.PI);
@@ -231,7 +284,11 @@ function update() {
 }
 
 function draw() {
+    clear("#111");
     update();
+
+    render3DProjectedWalls();
+    
     grid.render();
     for (ray of rays) {
         ray.render();
